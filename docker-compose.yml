@@ -1,0 +1,22 @@
+services:
+  torch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: torch:cu12.3
+    container_name: persona
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    shm_size: '8gb'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
